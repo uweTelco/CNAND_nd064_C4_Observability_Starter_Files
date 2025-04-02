@@ -63,8 +63,16 @@ Alternatively, you can use deployment files:
 ```bash
 kubectl create namespace observability
 kubectl apply -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.53.0/jaeger-operator.yaml -n observability
+
 ```
 
+### Post deployment steps
+Install these scripts, to have the operator role and the operator binding.
+
+```bash
+kubectl apply -f Exercise_Starter_Files/jaeger/jaeger-operator-role.yaml
+kubectl apply -f Exercise_Starter_Files/jaeger/jaeger-operator-binding.yaml
+```
 Check the deployment:
 
 ```bash
