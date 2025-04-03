@@ -15,6 +15,21 @@ app = Flask(__name__)
 
 rdb = redis.Redis(host="redis-primary.default.svc.cluster.local", port=6379, db=0)
 
+def do_heavy_work():
+    span = tracer.active_span  # Add reference to current span
+    if not span:
+        span = tracer.start_span("heavy-work")
+        
+    homepages = []
+    res = requests.get('https://api.github.com/repos/UweAusDeutschland/ND064_course_1/actions/runs/13784885825/jobs')
+    span.set_tag('jobs-count', len(res.json()))
+    for result in res.json():
+        with tracer.start_span(result[1], child_of=span) as site_span:
+            print('Getting website for %s' % result[1])
+            try:
+                homepages.append(requests.get(result['company_url']))
+            except:
+                print('Unable to get site for %s' % result[1])
 
 def init_tracer(service):
     logging.getLogger("").handlers = []

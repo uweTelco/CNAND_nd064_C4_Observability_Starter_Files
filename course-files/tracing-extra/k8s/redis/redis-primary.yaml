@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: primary
-        image: k8s.gcr.io/redis:e2e  # or just image: redis
+        image: k8s.gcr.io/redis
         resources:
           requests:
             cpu: 100m
