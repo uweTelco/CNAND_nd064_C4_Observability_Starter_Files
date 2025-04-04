@@ -2,16 +2,46 @@
 
 ## Verify the monitoring installation
 
-*TODO:* run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
+run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
+### picture
+ ![kubectl get pods and services](pictures/kubectl_get_pods_services.png)
+### text ouput
+```
+kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+backend-app-8657b45598-knt4n    1/1     Running   0          8m18s
+backend-app-8657b45598-grjlz    1/1     Running   0          8m18s
+backend-app-8657b45598-wlnp7    1/1     Running   0          8m18s
+frontend-app-5f9d7f7db9-8h4bl   1/1     Running   0          8m17s
+frontend-app-5f9d7f7db9-bwxp9   1/1     Running   0          8m17s
+frontend-app-5f9d7f7db9-gw75w   1/1     Running   0          8m17s
+trial-app-7c4ddb7b97-4xjqp      1/1     Running   0          8m17s
+trial-app-7c4ddb7b97-q8dzw      1/1     Running   0          8m17s
+trial-app-7c4ddb7b97-lkjht      1/1     Running   0          8m17s
 
+kubectl get services
+NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes         ClusterIP      10.43.0.1      <none>        443/TCP          37m
+backend-service    LoadBalancer   10.43.196.97   10.0.2.15     8081:31852/TCP   8m40s
+frontend-service   LoadBalancer   10.43.235.66   10.0.2.15     8080:32378/TCP   8m40s
+trial-service      LoadBalancer   10.43.244.49   10.0.2.15     8082:31708/TCP   8m39s
+```
 ## Setup the Jaeger and Prometheus source
-*TODO:* Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
+Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
+### picture
+ ![Grafana home](pictures/grafana_home.png)
 
 ## Create a Basic Dashboard
-*TODO:* Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
+Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
+### picture
+ ![Grafana Prometheus Source](pictures/Grafana_promethues_source.png)
 
 ## Describe SLO/SLI
-*TODO:* Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
+Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
+### SLO "monthly uptime"
+To measure the "monthly uptime" it is nessecary to a SLI metric that evaluates the uptime of the serives and pods.
+### SLO "request response time"
+To measure the "request response time" a SLI to define a threshold like 200 ms, and then identify how often in percentage this threshold is meet.
 
 ## Creating SLI metrics.
 *TODO:* It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
