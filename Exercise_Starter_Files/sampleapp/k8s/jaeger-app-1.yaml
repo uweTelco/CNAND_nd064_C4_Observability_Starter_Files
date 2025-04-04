@@ -13,13 +13,22 @@ spec:
       app: my-sample-app
   template:
     metadata:
+      annotations:
+        sidecar.jaegertracing.io/inject: "true"
       labels:
         app: my-sample-app
     spec:
       containers:
         - name: my-sample-app
-          image: ghcr.io/jasonsmithio/my-sample-app:v1
+          image: usuelter/sample-app-1
           imagePullPolicy: Always
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://simplest-collector.observability.svc.cluster.local:4318"
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://simplest-collector.observability.svc.cluster.local:4318" 
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "true" 
           ports:
             - name: frontend
               containerPort: 8888

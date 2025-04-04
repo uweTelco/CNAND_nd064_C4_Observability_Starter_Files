@@ -23,10 +23,12 @@ spec:
         ports:
         - containerPort: 8080
         env:
-          - name: JAEGER_AGENT_HOST
-            value: jaeger
-          - name: JAEGER_AGENT_PORT
-            value: '6831'
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "http://simples-collector.observability.svc.cluster.local:4318"
+          - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+            value: "" 
+          - name: OTEL_EXPORTER_OTLP_INSECURE
+            value: "true" 
           - name: PORT
             value: "8080"
 ---
