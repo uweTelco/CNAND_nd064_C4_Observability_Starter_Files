@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: trial-app
+  namespace: project3
 spec:
   replicas: 3
   selector:
@@ -11,6 +12,8 @@ spec:
     metadata:
       labels:
         app: trial
+      annotations:
+        sidecar.jaegertracing.io/inject: "true"
     spec:
       containers:
       - name: trial
@@ -23,6 +26,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: trial-service
+  namespace: project3
 spec:
   selector:
     app: trial

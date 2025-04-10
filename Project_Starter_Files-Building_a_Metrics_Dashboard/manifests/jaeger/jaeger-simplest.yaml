@@ -1,0 +1,9 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: simplest
+  namespace: project3
+spec:
+  strategy: allInOne
+  storage:
+    type: memory
