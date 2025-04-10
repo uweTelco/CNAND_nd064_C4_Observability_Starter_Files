@@ -45,6 +45,20 @@ To measure the "request response time" a SLI to define a threshold like 200 ms, 
 
 ## Creating SLI metrics.
 *TODO:* It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
+### Uptime measurement
+To measure the uptime, the uptime of the services will be measured, should be above 98%
+
+### Response Time Compliance
+Here is to measure the response time following the SLO target to have 95% requests ≤ 200ms.
+
+### Error Budget Burn Rate
+We check the slo violations based on the # of requests. 500 http responses shoud be < 3%
+
+### Pod Readiness
+The time that the pods are ready for the given serives shall be above 98%.
+
+### Request Rate
+Regualar have the # of requests shown on a dashboard, there is no limit assigned with this, since this hopefully will always grow as our company will grow.
 
 ## Create a Dashboard to measure our SLIs
 *TODO:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
