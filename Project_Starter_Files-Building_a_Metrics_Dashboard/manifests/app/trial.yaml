@@ -18,7 +18,7 @@ spec:
       containers:
       - name: trial
         # We advise you to build, push and use your own image, instead of using instructor's image.
-        image: ghcr.io/jasonsmithio/trial:v1
+        image: usuelter/trial-project3:latest
         ports:
         - containerPort: 8080
 ---
