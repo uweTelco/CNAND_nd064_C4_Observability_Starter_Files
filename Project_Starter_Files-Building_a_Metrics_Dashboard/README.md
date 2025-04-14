@@ -61,38 +61,59 @@ The time that the pods are ready for the given serives shall be above 98%.
 Regualar have the # of requests shown on a dashboard, there is no limit assigned with this, since this hopefully will always grow as our company will grow.
 
 ## Create a Dashboard to measure our SLIs
-*TODO:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
  ![kubectl board overview](answer-img/Grafana_overview.png)
 
 ## Tracing our Flask App
-*TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
+
+ ![Jaeger simple trace](answer-img/jaeger_simple_trace.png)
+
+  ![Python Span for Jaeger](answer-img/Python_span_example.png)
+
 
 ## Jaeger in Dashboards
-*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
+
+![PTime from Jaeger in dashboard](answer-img/TimeFromJaeger.png)
 
 ## Report Error
-*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
 
 TROUBLE TICKET
 
-Name:
+Name: Uwe Sülter
 
-Date:
+Date: 14.04.2025
 
-Subject:
+Subject: Implementation of /trace is broken 
 
-Affected Area:
+Affected Area: Start page
 
-Severity:
+Severity: high
 
 Description:
-
+On the start page, the integration of the trial app is broken. Whenever the endpoint for /trace is called, the system shows a 500 error. Please have a look on our dashboard: project3-dashboard. It shows clearly a high number of 500 errors in % of all responses as you can see on the "500 response %" visualisation.
 
 ## Creating SLIs and SLOs
-*TODO:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name four SLIs that you would use to measure the success of this SLO.
 
+For a 99.95% monthly uptime SLO, four essential SLIs would be:
+### HTTP Success Rate
+(Successful HTTP responses / Total requests) × 100
+Measures the percentage of requests returning 2xx/3xx status codes. Critical for detecting service outages.
+### Pod Readiness Ratio
+(Ready pods / Total desired pods) × 100
+Tracks availability of application instances. Kubernetes-native metric via kube_pod_status_ready.
+### Error Budget Consumption Rate
+(Error count / Total allowed errors) × 100
+Monitors how quickly errors eat into the 0.05% allowable downtime.
+### Synthetic Health Check Success
+(Successful synthetic probes / Total probes) × 100
+Simulates user traffic to detect silent failures.
 ## Building KPIs for our plan
-*TODO*: Now that we have our SLIs and SLOs, create a list of 2-3 KPIs to accurately measure these metrics as well as a description of why those KPIs were chosen. We will make a dashboard for this, but first write them down here.
+
+
+|SLI Metric| KPI| Rationale|
+|--------------|--------------|---------------|
+|HTTP Success Rate|30-day rolling success percentage , 5-minute error spike alerts|Provides trend analysis while enabling rapid response to outages|
+|Pod Readiness|Cluster-wide readiness %, Pod restart count per hour|Combines availability tracking with instability detection|
+|Error Budget|Daily burn rate, Remaining error budget days|Visualizes compliance trajectory and risk exposure|
 
 ## Final Dashboard
-*TODO*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+ ![Grafana Project Dashboard](answer-img/Grafana_final_overview.png)
