@@ -1,15 +1,18 @@
 import logging
 import re
 import requests
+import traceback
 
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, abort
 from flask_opentracing import FlaskTracing
 from jaeger_client import Config
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from prometheus_flask_exporter import PrometheusMetrics
+from opentracing.ext import tags as ot_tags
+
 
 
 app = Flask(__name__)
@@ -58,34 +61,49 @@ def trace():
         return tag.sub("", text)
 
     with tracer.start_span("get-python-jobs") as span:
-        res = requests.get("https://jobs.github.com/positions.json?description=python")
-        span.log_kv({"event": "get jobs count", "count": len(res.json())})
-        span.set_tag("jobs-count", len(res.json()))
+        try:
+            res = requests.get("https://jobs.github.com/positions.json?description=python")
+            span.log_kv({"event": "get jobs count", "count": len(res.json())})
+            span.set_tag("jobs-count", len(res.json()))
 
-        jobs_info = []
-        for result in res.json():
-            jobs = {}
-            with tracer.start_span("request-site") as site_span:
-                logger.info(f"Getting website for {result['company']}")
-                try:
-                    jobs["description"] = remove_tags(result["description"])
-                    jobs["company"] = result["company"]
-                    jobs["company_url"] = result["company_url"]
-                    jobs["created_at"] = result["created_at"]
-                    jobs["how_to_apply"] = result["how_to_apply"]
-                    jobs["location"] = result["location"]
-                    jobs["title"] = result["title"]
-                    jobs["type"] = result["type"]
-                    jobs["url"] = result["url"]
+            jobs_info = []
+            for result in res.json():
+                jobs = {}
+                with tracer.start_span("request-site") as site_span:
+                    logger.info(f"Getting website for {result['company']}")
+                    try:
+                        jobs["description"] = remove_tags(result["description"])
+                        jobs["company"] = result["company"]
+                        jobs["company_url"] = result["company_url"]
+                        jobs["created_at"] = result["created_at"]
+                        jobs["how_to_apply"] = result["how_to_apply"]
+                        jobs["location"] = result["location"]
+                        jobs["title"] = result["title"]
+                        jobs["type"] = result["type"]
+                        jobs["url"] = result["url"]
 
-                    jobs_info.append(jobs)
-                    site_span.set_tag("http.status_code", res.status_code)
-                    site_span.set_tag("company-site", result["company"])
-                except Exception:
-                    logger.error(f"Unable to get site for {result['company']}")
-                    site_span.set_tag("http.status_code", res.status_code)
-                    site_span.set_tag("company-site", result["company"])
-
+                        jobs_info.append(jobs)
+                        site_span.set_tag("http.status_code", res.status_code)
+                        site_span.set_tag("company-site", result["company"])
+                    except Exception:
+                        logger.error(f"Unable to get site for {result['company']}")
+                        site_span.set_tag("http.status_code", res.status_code)
+                        site_span.set_tag("company-site", result["company"])
+        except Exception as e:
+            logger.error(f"Unable to get base site for https://jobs.github.com/positions.json?description=python.")
+            # Mark span as erroneous
+            site_span.set_tag(ot_tags.ERROR, True)
+            # Log error details
+            site_span.log_kv({
+                'event': 'error',
+                'error.object': str(e),
+                'message': f"Failed to receive: https://jobs.github.com/positions.json?description=python",
+                'stack': traceback.format_exc()
+            })
+            # Optional: Set HTTP status code if available
+            if res:
+                site_span.set_tag("http.status_code", res.status_code)
+            return abort(500)
     return jsonify(jobs_info)
 
 

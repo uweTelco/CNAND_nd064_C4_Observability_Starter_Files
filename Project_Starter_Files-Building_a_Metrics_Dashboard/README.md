@@ -3,29 +3,12 @@
 ## Verify the monitoring installation
 
 run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
-### picture
+### Pods and services of application
  ![kubectl get pods and services](answer-img/kubectl_get_pods_services.png)
-### text ouput
-```
-kubectl get pods
-NAME                            READY   STATUS    RESTARTS   AGE
-backend-app-8657b45598-knt4n    1/1     Running   0          8m18s
-backend-app-8657b45598-grjlz    1/1     Running   0          8m18s
-backend-app-8657b45598-wlnp7    1/1     Running   0          8m18s
-frontend-app-5f9d7f7db9-8h4bl   1/1     Running   0          8m17s
-frontend-app-5f9d7f7db9-bwxp9   1/1     Running   0          8m17s
-frontend-app-5f9d7f7db9-gw75w   1/1     Running   0          8m17s
-trial-app-7c4ddb7b97-4xjqp      1/1     Running   0          8m17s
-trial-app-7c4ddb7b97-q8dzw      1/1     Running   0          8m17s
-trial-app-7c4ddb7b97-lkjht      1/1     Running   0          8m17s
 
-kubectl get services
-NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-kubernetes         ClusterIP      10.43.0.1      <none>        443/TCP          37m
-backend-service    LoadBalancer   10.43.196.97   10.0.2.15     8081:31852/TCP   8m40s
-frontend-service   LoadBalancer   10.43.235.66   10.0.2.15     8080:32378/TCP   8m40s
-trial-service      LoadBalancer   10.43.244.49   10.0.2.15     8082:31708/TCP   8m39s
-```
+### Pods on monitoring and observability namespace
+ ![kubectl get pods from secondary namespcaces](answer-img/PodsFromMonitoringAndObservability.png)
+
 ## Setup the Jaeger and Prometheus source
 Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
 ### picture
@@ -89,7 +72,9 @@ Affected Area: Start page
 Severity: high
 
 Description:
-On the start page, the integration of the trial app is broken. Whenever the endpoint for /trace is called, the system shows a 500 error. Please have a look on our dashboard: project3-dashboard. It shows clearly a high number of 500 errors in % of all responses as you can see on the "500 response %" visualisation.
+On the start page, the integration of the trial app is broken. Whenever the endpoint for /trace is called, the system shows a 500 error. Please have a look on our dashboard: project3-dashboard. It shows clearly a high number of 500 errors in % of all responses as you can see on the "500 response %" visualisation. Please look at the given trace:
+![Trace for failing get-python-job](answer-img/ErrorTrace.png)
+
 
 ## Creating SLIs and SLOs
 
@@ -117,3 +102,17 @@ Simulates user traffic to detect silent failures.
 
 ## Final Dashboard
  ![Grafana Project Dashboard](answer-img/Grafana_final_overview.png)
+
+ ### Uptime (99.95% Target)
+Percentage of time the service is up. Tracks the percentage of time your service is operational, ensuring it meets the uptime SLO.
+
+ ### Pod Readiness
+ Percentage of pods ready for use. Tracks pod availability to ensure service reliability.
+
+ ### Error Budget Burn Rate
+Rate at which the error budget is consumed. Helps track how quickly errors are consuming the allowable error budget.
+ ### Response Time Compliance
+ Percentage of requests with latency ≤ 200ms. Ensures that most requests meet the response time SLO.
+
+ ### Request Success Rate
+Percentage of successful HTTP responses (2xx status codes). Monitors how often requests are successfully handled, ensuring compliance with error budget limits.
