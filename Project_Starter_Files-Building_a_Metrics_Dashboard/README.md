@@ -4,7 +4,7 @@
 
 run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
 ### picture
- ![kubectl get pods and services](nswer-img/kubectl_get_pods_services.png)
+ ![kubectl get pods and services](answer-img/kubectl_get_pods_services.png)
 ### text ouput
 ```
 kubectl get pods
@@ -29,12 +29,12 @@ trial-service      LoadBalancer   10.43.244.49   10.0.2.15     8082:31708/TCP   
 ## Setup the Jaeger and Prometheus source
 Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
 ### picture
- ![Grafana home](nswer-img/grafana_home.png)
+ ![Grafana home](answer-img/grafana_home.png)
 
 ## Create a Basic Dashboard
 Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
 ### picture
- ![Grafana Prometheus Source](nswer-img/Grafana_promethues_source.png)
+ ![Grafana Prometheus Source](answer-img/Grafana_promethues_source.png)
 
 ## Describe SLO/SLI
 Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
@@ -44,7 +44,7 @@ To measure the "monthly uptime" it is nessecary to a SLI metric that evaluates t
 To measure the "request response time" a SLI to define a threshold like 200 ms, and then identify how often in percentage this threshold is meet.
 
 ## Creating SLI metrics.
-*TODO:* It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
+
 ### Uptime measurement
 To measure the uptime, the uptime of the services will be measured, should be above 98%
 
@@ -62,6 +62,7 @@ Regualar have the # of requests shown on a dashboard, there is no limit assigned
 
 ## Create a Dashboard to measure our SLIs
 *TODO:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
+ ![kubectl board overview](answer-img/Grafana_overview.png)
 
 ## Tracing our Flask App
 *TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
