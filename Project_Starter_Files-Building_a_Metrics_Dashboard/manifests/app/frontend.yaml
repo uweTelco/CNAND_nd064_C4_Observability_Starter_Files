@@ -28,6 +28,25 @@ spec:
   selector:
     app: frontend
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
   type: LoadBalancer
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: frontend-servicemonitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: frontend 
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

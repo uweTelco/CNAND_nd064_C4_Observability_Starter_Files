@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: backend
+        app: trial
       annotations:
         sidecar.jaegertracing.io/inject: "true"
     spec:
@@ -19,7 +19,8 @@ spec:
         # We advise you to build, push and use your own image, instead of using instructor's image.
         image: usuelter/trial-project3:latest
         ports:
-        - containerPort: 8080
+        - name: http-metrics
+          containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -33,3 +34,18 @@ spec:
       port: 8082
       targetPort: 8080
   type: LoadBalancer
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: trial-podmonitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: trial  # ← Matches Pod labels directly
+  podMetricsEndpoints:
+  - port: http-metrics  # ← Named port from Deployment
+    path: /metrics
+    interval: 5s

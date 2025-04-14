@@ -19,7 +19,8 @@ spec:
         # We advise you to build, push and use your own image, instead of using instructor's image.      
         image: usuelter/backend-project3:latest
         ports:
-        - containerPort: 8081
+        - name: http-metrics
+          containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
@@ -37,19 +38,16 @@ spec:
   type: LoadBalancer
 ---
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
-  name: backend-servicemonitor
+  name: backend-podmonitor
   labels:
     release: prometheus
 spec:
   selector:
     matchLabels:
-      app: backend 
-  namespaceSelector:
-    matchNames:
-      - default
-  endpoints:
-    - port: http
-      path: /metrics
-      interval: 15s
+      app: backend  
+  podMetricsEndpoints:
+  - port: http-metrics  
+    path: /metrics
+    interval: 5s
