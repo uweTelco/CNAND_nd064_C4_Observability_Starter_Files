@@ -4,7 +4,7 @@
 
 run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
 ### picture
- ![kubectl get pods and services](pictures/kubectl_get_pods_services.png)
+ ![kubectl get pods and services](nswer-img/kubectl_get_pods_services.png)
 ### text ouput
 ```
 kubectl get pods
@@ -29,12 +29,12 @@ trial-service      LoadBalancer   10.43.244.49   10.0.2.15     8082:31708/TCP   
 ## Setup the Jaeger and Prometheus source
 Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
 ### picture
- ![Grafana home](pictures/grafana_home.png)
+ ![Grafana home](nswer-img/grafana_home.png)
 
 ## Create a Basic Dashboard
 Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
 ### picture
- ![Grafana Prometheus Source](pictures/Grafana_promethues_source.png)
+ ![Grafana Prometheus Source](nswer-img/Grafana_promethues_source.png)
 
 ## Describe SLO/SLI
 Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
